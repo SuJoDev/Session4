@@ -1,0 +1,212 @@
+:root {
+    --green :#78B24B
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Базовые стили */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.header {
+    background-color: #fff; /* Цвет фона шапки */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Тень для шапки */
+    padding: 10px 0;
+    margin-bottom: 100px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    height: 80px; /* Высота логотипа */
+    width: auto; /* Автоматическая ширина */
+}
+
+.search_input {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    width: 80%; /* Ширина поля поиска */
+    margin-left: 20px; /* Отступ от логотипа */
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+.news-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.stuff_grid {
+    display: flex; /* Горизонтальный список */
+    gap: 20px; /* Расстояние между элементами */
+    overflow-x: auto; /* Прокрутка по горизонтали, если элементы не помещаются */
+    padding-bottom: 10px; /* Отступ для скроллбара */
+}
+
+.stuff_card {
+    flex: 0 0 auto; /* Элементы не растягиваются и не сжимаются */
+    margin: 10px;
+    padding: 10px;
+    color: #fff;
+    background-color: var(--green);
+    min-width: 250px; /* Минимальная ширина карточки */
+}
+
+.main_frame{
+    display: flex;
+}
+
+.stuff_card h3,
+.stuff_card p {
+    padding-bottom: 5px;
+}
+
+.stuff_section{
+    padding-bottom: 20px;
+}
+
+.events_frame {
+    margin-right: 30px;
+    max-width: 35%;
+    display: flex;
+    flex-direction: column;
+}
+
+.qr_btns {
+    display: flex;
+    justify-content: space-between;
+}
+
+.events_frame h5,
+.events_frame p {
+    color: #fff;
+    margin: 10px;
+}
+
+.footer_event{
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer_event button{
+    background-color: rgba(0, 0, 0, 0);
+    border: rgba(0, 0, 0, 0);
+    cursor: pointer;
+}
+
+.footer_btn{
+    display: inline;
+    justify-content: center
+}
+.footer_btn button{
+    cursor: pointer;
+}
+
+.event_card{
+    background-color: var(--green);
+}
+
+.calendar_frame{
+    display: flex;
+    flex-direction: column;
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.calendar_table{
+    text-align: center;
+}
+
+.calendar_header{
+    margin: 10px;
+    padding: 10px;
+    display: flex;
+    background-color: var(--green);
+    justify-content: space-around;
+}
+.calendar_header button{
+    font-size: 20px;
+
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    cursor: pointer;
+}
+
+.current-day {
+    border: 2px solid gray; /* Цвет обводки */
+    border-radius: 50%; /* Кружок */
+    padding: 5px; /* Отступы для визуализации */
+}
+
+.non-working-day {
+    color: red; /* Цвет шрифта для выходных дней */
+}
+
+#multiple-events{
+    background-color: red;
+}
+#low-event {
+    background-color: green;
+}
+#mid-event{
+    background-color: yellow;
+}
+
+/* Адаптивность */
+@media (max-width: 1100px) {
+    .search_input {
+        width: 100%; /* Полная ширина на мобильных устройствах */
+        margin-left: 0;
+        margin-top: 10px; /* Отступ сверху */
+    }
+}
+
+@media (max-width: 400px) {
+    .logo {
+        display: none;
+    }
+
+    .search_input {
+        font-size: 14px; /* Уменьшение размера текста */
+        margin-right: 10px;
+    }
+
+    .stuff_card {
+        width: 200px;
+    }
+
+    .main_frame{
+        display: flex;
+        flex-direction: column;
+    }
+    .events_frame{
+        max-width: 100%;
+    }
+}

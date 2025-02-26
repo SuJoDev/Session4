@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Календарь</title>
+</head>
+<body>
+    <h1>Календарь</h1>
+
+    <!-- Форма с кнопками для переключения месяцев -->
+    <form method="POST">
+        <div class="calendar-header">
+            <!-- Кнопка для перехода к предыдущему месяцу -->
+            <button type="submit" name="prev">←</button>
+            <!-- Название месяца и года -->
+            <h2>{{ month_name }} {{ year }}</h2>
+            <!-- Кнопка для перехода к следующему месяцу -->
+            <button type="submit" name="next">→</button>
+        </div>
+
+        <!-- Добавим скрытые поля для года и месяца -->
+        <input type="hidden" name="year" value="{{ year }}">
+        <input type="hidden" name="month" value="{{ month }}">
+    </form>
+
+    <!-- Таблица с календарем -->
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Пн</th>
+                <th>Вт</th>
+                <th>Ср</th>
+                <th>Чт</th>
+                <th>Пт</th>
+                <th>Сб</th>
+                <th>Вс</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in calendar %}
+                <tr>
+                    {% for day in week %}
+                        <td>
+                            {% if day != 0 %}
+                                {{ day }}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
