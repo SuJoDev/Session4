@@ -24,40 +24,44 @@ lastest_news = []
 stuff_members = []
 events = []
 
-def generate_vcard(name, email, phone, position):
-    vcard = f"""BEGIN:VCARD
+def generate_vcard(name, phone, email, position):
+    vcard =f"""
+        BEGIN:VCARD
         VERSION:3.0
-        N:{name.split()[-1]} 
+        N:{name.split()[-1]}
         FN:{name}
-        ORG:Ваша компания
+        ORG:ГК Дороги России
         TITLE:{position}
         TEL;WORK;VOICE:{phone}
+        TEL;CELL:+70000000000
         EMAIL;WORK;INTERNET:{email}
-        END:VCARD"""
+        END:VCARD
+        """    
     return vcard
 
-@app.route('/generate_qr', methods=['GET'])
-def generate_qr_image():
-    name = request.args.get('name')
-    email = request.args.get('email')
-    phone = request.args.get('phone')
-    position = request.args.get('position')
-
-    vcard = generate_vcard(name, email, phone, position)
-    qr_image = generate_qr(vcard)
-
-    img_io = io.BytesIO()
-    qr_image.save(img_io, 'PNG')
-    img_io.seek(0)
-    return send_file(img_io, mimetype='image/png')
-
 def generate_qr(vcard):
-    qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=3, border=2)
+    qr = qrcode.QRCode()
     qr.add_data(vcard)
     qr.make(fit=True)
-
-    img = qr.make_image(fill='black', back_color='white')
+    
+    img = qr.make_image()
     return img
+    
+@app.route("/generate_qr", methods = ["GET"])
+def generate_qr_image():
+    name = request.args.get('name')
+    phone= request.args.get('phone')
+    email = request.args.get('email')
+    position = request.args.get('position')
+    
+    vcard = generate_vcard(name, phone, email, position)
+    qr_img = generate_qr(vcard)
+    
+    img_io = io.BytesIO()
+    qr_img.save(img_io, "PNG")
+    img_io.seek(0)
+    return send_file(img_io, mimetype = 'image/png')
+    
 
 def get_free_day():
     response = requests.get("http://127.0.0.1:8000/calendar_work")
