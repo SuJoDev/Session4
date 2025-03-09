@@ -1,68 +1,73 @@
 <!DOCTYPE html>
-<html lang="ru">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="../static/style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Последние новости</title>
+    <title>Дороги России</title>
 </head>
-
 <body>
-    <header class="header">
+    
+    <section class = "header">
         <div class="container">
-            <div class="nav">
-                <img class="logo" src="static/img/logo.svg">
+            <div class = "nav">
+                <img class="logo" src="../static/img/logo.svg">
                 <input class="search_input" type="text" name="search" placeholder="Введите для поиска" value="{{ request.args.get('search', '') }}">
             </div>
         </div>
-    </header>
+    </section>
 
-    <section class="stuff_section">
-        <div class="container">
+    <section class ="stuff_frame">
+        <div class = "container">
             <h2>Сотрудники</h2>
-            <div class="stuff_grid">
-                {%if not stuff %}
-                <h3>Данные не найдены</h3>
+            <div class ="stuff_grid">
+                {%if not stuff%}
+                <h2>Данных не найдено</h2>
                 {% else %}
-                {% for item in stuff %}
+                {% for i in stuff%}
                     <div class="stuff_card">
-                        <h3>{{ item.name }}</h3>
-                        <p>{{ item.post }}</p>
+                        <h4>{{i.name}}</h4>
+                        <p>{{i.post}}</p>
                         <p>email</p>
-                        <p>{{ item.phone }}</p>
+                        <p>{{i.phone}}</p>
                         <div class="qr_btns">
-                            <p> {{ item.bdate}} </p>
-                        <!-- Кнопка для показа QR-кода -->
-                            <button onclick="generateQr('{{ item.name }}', '{{ item.email }}', '{{ item.phone }}', '{{ item.post }}', {{ loop.index }})">🎞</button>
+                            <p>{{ i.bdate }}</p>
+                            <!-- Форма для отправки данных на сервер -->
+                            <form action="/generate_qr" method="GET">
+                                <input type="hidden" name="name" value="{{ i.name }}">
+                                <input type="hidden" name="email" value="{{ i.email }}">
+                                <input type="hidden" name="phone" value="{{ i.phone }}">
+                                <input type="hidden" name="position" value="{{ i.post }}">
+                                <button type="submit">🎞</button>
+                            </form>
                         </div>
                         <!-- Место для отображения QR-кода -->
                         <div id="qr-{{ loop.index }}" class="qr-code" style="display:none;">
                             <img id="qr-img-{{ loop.index }}" src="" alt="QR-код">
                         </div>
                     </div>
-                {% endfor %}
-                {%endif%}
+            {% endfor %}
+            {% endif %}
             </div>
         </div>
     </section>
 
-    <section class="main_section">
-        <div class="container">
-            <div class="main_frame">
-                <!-- Календарь событий -->
-                <div class="events_frame">
+        <div class = "container">
+            <div class = "events_news_frame">
+                <div class ="events_frame">
+
                     <h2>Календарь событий</h2>
+
                     <form method="POST" class = "calendar_frame">
-                        <div class="calendar_header">
-                            <button type="submit" name="prev" class="calendar-button">⬅</button>
-                            <h2>{{ month_name }} {{ year }}</h2>
-                            <button type="submit" name="next" class="calendar-button">➡</button>
+                        <div class = "calendar_header">
+                            <button type = "submit" name = "prev">⬅</button>
+                            <h2>{{year}} {{month_name}}</h2>
+                            <button type="submit" name="next">➡</button>
                         </div>
-                        <input type="hidden" name="year" value="{{ year }}">
-                        <input type="hidden" name="month" value="{{ month }}">
-    
-                        <table class="calendar_table">
+                        <input type="hidden" name="year" value="{{year}}">
+                        <input type="hidden" name="month" value="{{month}}">
+
+                        <table class="calendar_widget">
                             <thead>
                                 <tr>
                                     <th>Пн</th>
@@ -76,10 +81,10 @@
                             </thead>
                             <tbody>
                                 {% for week in calendar %}
-                                    <tr>
-                                        {% for day in week %}
-                                            {% if day != 0 %}  {# Убедитесь, что день не равен 0 #}
-                                                {% set date_str = '{:04d}-{:02d}-{:02d}'.format(year, month, day) %}
+                                <tr>
+                                    {% for day in week %}
+                                    {% if day != 0 %}
+                                    {% set date_str = '{:04d}-{:02d}-{:02d}'.format(year, month, day) %}
                                                 {% set is_today = (day == now.day and month == now.month and year == now.year) %}
                                                 {% set is_non_working = date_str in non_working_days %}
                                                 {% set event_count_today = event_count.get(datetime(year, month, day).date(), 0) %}
@@ -87,83 +92,45 @@
                                                     class="{% if is_today %}current-day{% endif %} {% if is_non_working %}non-working-day{% endif %}">
                                                     {{ day }}
                                                 </td>
-                                            {% else %}
-                                                <td class="empty-day"></td>  {# Пустая ячейка для дней, равных 0 #}
-                                            {% endif %}
-                                        {% endfor %}
-                                    </tr>
-                                {% endfor %}
-                            </tbody>                                                    
+                                    {%else%}
+                                    <td></td>
+                                    {%endif%}
+                                    {%endfor%}
+                                </tr>
+                                {%endfor%}
+                            </tbody>
                         </table>
                     </form>
-                    
+
                     <h2>События</h2>
-
-                    {% for item in events %}
-                        <div class="event_card">
-                            <h5 class="title">{{ item.name }}</h5>
-                            <p class="description">{{ item.discription }}</p>
-                            <div class="footer_event">
-                                <button class="download_event_btn" onclick="downloadEvent('{{ item.id }}')">📥</button>
-                                <p>{{ item.ev_date }}</p>
-                                <p>{{ item.author_name }}</p>
-                            </div>
+                    {%if not events%}
+                    <h2>События не найдены</h2>
+                    {%else%}
+                    {%for i in events%}
+                    <div class = "event_card">
+                        <h4>{{i.name}}</h4>
+                        <p>{{i.discription}}</p>
+                        <div class="footer_events">
+                            <button class='calebdar_btn'>🗓</button>
+                            <p>{{i.ev_date}}</p>
+                            <p>{{i.author_name}}</p>
                         </div>
-                    {% endfor %}
-                </div>
-    
-                <!-- Последние новости -->
-                <div class="news_frame">
-                    <h1 class="test">Последние новости</h1>
-                    <div class="news-grid">
-                        {% for item in news %}
-                            <div class="news-item">
-                                <h2>{{ item.title }}</h2>
-                                <p>{{ item.summary }}</p>
-                                <a href="{{ item.link }}" target="_blank">Читать далее</a>
-                            </div>
-                        {% endfor %}
                     </div>
+                    {%endfor%}
+                    {%endif%}
                 </div>
-            </div>
+                <div class ="news_frame">
+                    <h2>Новости</h2>
+                </div>
+            </div>        
         </div>
-    </section>
-    
-
-    <script>
-        function downloadEvent(event) {
-            const url = `/download_event?summary=${encodeURIComponent(event.name)}&start=${encodeURIComponent(event.ev_date)}&description=${encodeURIComponent(event.description || '')}&location=${encodeURIComponent(event.location || '')}&organizer=${encodeURIComponent(event.author_name || '')}`;
-            window.location.href = url;
-        }
-    </script>
-    
-
-    <script>
-        // Обработчик клика на кнопку для генерации QR-кода
-        function generateQr(name, email, phone, position, index) {
-            // Находим div с qr-кодом по индексу
-            const qrDiv = document.getElementById('qr-' + index);
-            const qrImg = document.getElementById('qr-img-' + index);
-
-            // Генерация URL для запроса QR-кода с параметрами
-            const qrUrl = `/generate_qr?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&phone=${encodeURIComponent(phone)}&position=${encodeURIComponent(position)}`;
-
-            // Устанавливаем URL изображения
-            qrImg.src = qrUrl;
-            // Показываем блок с изображением QR-кода
-            qrDiv.style.display = 'block';
-        }
-    </script>
-
-    <script>
-        // Обновляем страницу с поисковым запросом при каждом изменении
-        document.querySelector('.search_input').addEventListener('input', function() {
-            const searchValue = this.value;
-            const url = new URL(window.location.href);
-            url.searchParams.set('search', searchValue);  // Обновляем параметр поиска
-            window.location.href = url.toString();  // Перенаправляем на обновленный URL с поисковым параметром
-        });
-
-    </script>
+        <script>
+            document.querySelector('.search_input').addEventListener('input', function() {
+                const searchValue = this.value;
+                const url = new URL(window.location.href);
+                url.searchParams.set('search', searchValue);
+                window.location.href = url.toString();
+            });
+        </script>
 </body>
 </html>
